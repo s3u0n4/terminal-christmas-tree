@@ -41,3 +41,35 @@ java -cp out CodeTree
 | 오너먼트 간격 / 색 | `ORNAMENT_SPACING`, `ORNAMENT_COLORS` |
 | 선물 크기·색·무늬 | `GIFT_STYLES` |
 | 음악 템포 / 악기 | `setTempoInBPM(160)`, `GLOCKENSPIEL` |
+
+## 🎁 3D 오르골
+
+같은 저장소에 3D 크리스마스 오르골도 들어 있어요. 칸마다 광선을 쏴서 입체로 그립니다.
+
+- 빨간 받침 상자 위 유리 돔 안에서 트리·눈사람·선물이 **회전판을 따라 빙글빙글** 돌아요
+- 돔 안에는 눈이 내리고, 상자 옆 태엽 손잡이도 같이 돌아가요
+- 카메라가 좌우로 천천히 오가며 비추고, **고요한 밤**이 오르골 소리로 흘러나와요 🎵
+
+### 실행 방법
+
+```bash
+javac -d out src/main/java/MusicBox.java
+java -cp out MusicBox
+```
+
+- 트리와 마찬가지로 터미널 창을 크게 키운 다음 실행하고, `Ctrl+C`로 끝내요.
+- 크기를 직접 정하려면: `java -cp out MusicBox 50 170`
+- 창이 아주 크면 그릴 칸이 많아져서 움직임이 조금 느려질 수 있어요.
+
+### 꾸미기
+
+`src/main/java/MusicBox.java` 맨 위 상수를 바꾸면 됩니다.
+
+| 바꾸고 싶은 것 | 값 |
+|---|---|
+| 회전판 / 손잡이 도는 속도 | `SPIN_SPEED`, `CRANK_SPEED` |
+| 카메라 거리·높이·흔들림 / 확대 | `CAM_DIST`, `CAM_HEIGHT`, `CAM_SWING`, `ZOOM` |
+| 상자·트리·바닥 등 색 | `LACQUER`, `GOLD`, `PINE`, `GROUND` 등 |
+| 오너먼트 색 / 선물 위치·색 | `ORNAMENT_COLORS`, `GIFTS`, `GIFT_BOX_COLORS` |
+| 눈송이 수 | `GLOBE_SNOW`, `SKY_SNOW_CELLS` |
+| 멜로디 / 템포 | `MELODY`, `setTempoInBPM(84)` |

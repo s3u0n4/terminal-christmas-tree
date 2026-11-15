@@ -68,7 +68,7 @@ public class MusicBox {
     private static final double SNOWMAN_X = 0.56, SNOWMAN_Z = 0.14;
     private static final double CRANK_ARM = 0.22;
 
-    // 유리 돔 안 눈송이 수, 바깥 하늘 눈송이는 몇 칸에 하나
+    // 유리 돔 안 눈송이 수, 바깥 눈송이는 몇 칸에 하나 (하늘부터 바닥 맨 아래 줄까지 내림)
     private static final int GLOBE_SNOW = 80;
     private static final int SKY_SNOW_CELLS = 70;
     private static final String MESSAGE = "Merry Christmas!";
@@ -116,7 +116,7 @@ public class MusicBox {
     private static char[] cellChar;
     private static int[] cellFg;
     private static double[] cellDepth;
-    private static boolean[] cellSky;
+    private static boolean[] cellOpen;                   // 오르골이 없는 칸 (하늘, 바닥): 바깥 눈이 내리는 곳
     private static double[][] globeSnow;                 // {x, y, z, 떨어지는 속도, 흔들림 위상}
     private static int[][] skySnow;                      // {줄, 칸, 글자}
 
@@ -132,7 +132,7 @@ public class MusicBox {
         cellChar = new char[rows * cols];
         cellFg = new int[rows * cols];
         cellDepth = new double[rows * cols];
-        cellSky = new boolean[rows * cols];
+        cellOpen = new boolean[rows * cols];
         buildPalette();
         initSnow();
 
@@ -332,7 +332,7 @@ public class MusicBox {
 
                 int idx = row * cols + col;
                 cellChar[idx] = ' ';
-                cellSky[idx] = false;
+                cellOpen[idx] = false;
                 double depth = Double.MAX_VALUE;
                 if (hit > 0) {
                     double px = camX + dx * hit, py = camY + dy * hit, pz = camZ + dz * hit;
@@ -344,9 +344,10 @@ public class MusicBox {
                 } else if (dy < 0 && (FLOOR_Y - camY) / dy > 0) {
                     depth = (FLOOR_Y - camY) / dy;
                     shadeGround(camX + dx * depth, camZ + dz * depth, depth, sv);
+                    cellOpen[idx] = true;
                 } else {
                     sky(sv);
-                    cellSky[idx] = true;
+                    cellOpen[idx] = true;
                 }
                 cellDepth[idx] = depth;
                 glass(dx, dy, dz, depth);
@@ -619,7 +620,7 @@ public class MusicBox {
     private static void drawSnow() {
         char[] skyChars = {'.', '*', '+'};
         for (int[] f : skySnow) {
-            if (f[1] >= 0 && f[1] < cols && cellSky[f[0] * cols + f[1]]) {
+            if (f[1] >= 0 && f[1] < cols && cellOpen[f[0] * cols + f[1]]) {
                 cellChar[f[0] * cols + f[1]] = skyChars[f[2]];
                 cellFg[f[0] * cols + f[1]] = f[2] == 0 ? 250 : 255;
             }
